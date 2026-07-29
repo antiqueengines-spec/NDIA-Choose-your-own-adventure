@@ -731,6 +731,23 @@ export const extraMocks: Record<string, MockExchange> = {
     },
     plainEnglish:
       'Batch accepted asynchronously (batch_reference_name: kai-mixed-week.csv). Next: inspect finish results — including any OPEN PACE lines.',
+    responseParsed: {
+      title: 'Batch request body',
+      summary: 'kai-mixed-week.csv · 3 lines · mixed SAP & PACE participants',
+      stats: [
+        { label: 'Batch lines', value: '3' },
+        { label: 'Total claimed', value: '$460.05' },
+        { label: 'SAP lines', value: '1' },
+        { label: 'PACE lines', value: '2' },
+      ],
+      columns: ['Participant', 'Plan type', 'NDIS #', 'Amount', 'Product', 'Ref'],
+      rows: [
+        ['Participant A', 'SAP', '430001234', '$135.12', '01_011_0107_1_1', 'KAI-SAP-MAYA-01'],
+        ['Participant B', 'PACE', '430005551', '$193.99', '15_037_0117_1_3', 'KAI-PACE-SAM-01'],
+        ['Participant C', 'PACE', '431015452', '$130.94', '04_104_0125_6_1', 'KAI-PACE-OPEN-01'],
+      ],
+      notes: ['Batch submitted via POST. Results arrive asynchronously via BULK_PROCESS_FINISH webhook.'],
+    },
   },
   kai_batch_open: {
     id: 'kai_batch_open',
@@ -953,7 +970,7 @@ export const extraMocks: Record<string, MockExchange> = {
         ['Participant B', 'PACE', '10504002', '$193.99', 'Payment Pending (4)'],
         ['Participant C', 'PACE', '0', '$130.94', 'OPEN (held)'],
       ],
-      notes: ['Bulk Claim Report is delivered overnight after NDIA processing and payment cycles.'],
+      notes: ['OPEN / unendorsed PACE lines remain held until participant approval, rejection, or alloted time period — they will not show as Paid / Error until they are processed. Most CA Lite integrations use an automated process to complete the Bulk Claim Report requests daily until all items are either PAID or Error.'],
     },
   },
   kai_bulk_report_paid: {
@@ -1026,7 +1043,7 @@ export const extraMocks: Record<string, MockExchange> = {
           clearing_number: 7800001202,
         },
         {
-          participant_name: '',
+          participant_name: 'Participant C',
           participant: 431015452,
           claim_number: 10504003,
           claimed_amount: 130.94,
@@ -1072,8 +1089,77 @@ export const extraMocks: Record<string, MockExchange> = {
         ['Participant B', '10504002', '$193.99', 'Paid (41)', '7800001202'],
         ['Participant C', '10504003', '$130.94', 'Paid (41)', '7800001203'],
       ],
-      notes: ['Overnight cycle completed and all three lines now appear as Paid in report payload format.'],
+      notes: ['Overnight cycle completed — all three lines (including the previously OPEN PACE claim for Participant C) now appear as Paid in report payload format.'],
     },
+  },
+  noah_determine: {
+    id: 'noah_determine',
+    label: 'Determine participant plan',
+    method: 'GET',
+    path: '/ndia-middleware/v1/4.0/determine-participant-plan/',
+    request: {
+      participant: 600138083,
+      participant_surname: 'Park',
+      date_of_birth: '1988-03-15',
+    },
+    response: {
+      success: true,
+      result: {
+        is_pace_plan: true,
+        plan_first_start_date: '2024-08-02',
+      },
+    },
+    plainEnglish:
+      'Noah is confirmed as a PACE participant. The system now routes to PACE-specific plan and budget endpoints.',
+  },
+  noah_pace_plans: {
+    id: 'noah_pace_plans',
+    label: 'PACE plans GET',
+    method: 'GET',
+    path: '/ndia-middleware/v1/ext-int-part/4.0/pace/plans/',
+    request: {
+      participant: 600138083,
+      participant_surname: 'Park',
+      date_of_birth: '1988-03-15',
+    },
+    response: {
+      success: true,
+      result: [
+        {
+          is_pace_plan: true,
+          participant_plan_id: 0,
+          plan_start_date: '2025-06-26',
+          plan_end_date: '2028-06-26',
+          plan_first_start_date: '2024-08-02',
+        },
+      ],
+    },
+    plainEnglish:
+      'Noah's current PACE plan runs until mid-2028. The plan_first_start_date shows he has been on PACE since August 2024 — meaning historical plans exist.',
+  },
+  noah_historical_plans: {
+    id: 'noah_historical_plans',
+    label: 'Historical plans',
+    method: 'GET',
+    path: '/ndia-middleware/v1/ext-int-part/4.0/pace/historical/plans',
+    request: {
+      participant: 600138083,
+      participant_surname: 'Park',
+      date_of_birth: '1988-03-15',
+    },
+    response: {
+      success: true,
+      result: {
+        historical_plan: [
+          {
+            start_date: '2024-08-02',
+            end_date: '2025-06-25',
+          },
+        ],
+      },
+    },
+    plainEnglish:
+      'One prior PACE plan found (Aug 2024 – Jun 2025). This confirms plan continuity and helps reconcile historical claims or budget queries against the correct plan period.',
   },
 }
 

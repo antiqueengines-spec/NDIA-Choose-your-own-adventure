@@ -9,6 +9,7 @@ export type ParticipantId =
   | 'priya'
   | 'lena'
   | 'kai'
+  | 'noah'
 
 export interface MockExchange {
   id: string

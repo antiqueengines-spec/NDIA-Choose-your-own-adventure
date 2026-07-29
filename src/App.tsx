@@ -81,6 +81,9 @@ export default function App() {
           />
         </a>
         <div className="header-actions">
+          <button type="button" className="text-btn" onClick={goLanding}>
+            Home
+          </button>
           <button type="button" className="text-btn" onClick={goPick}>
             Journeys
           </button>

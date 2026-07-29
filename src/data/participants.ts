@@ -598,10 +598,10 @@ export const participants: Participant[] = [
   },
   {
     id: 'kai',
-    name: 'Kai Mendes',
+    name: 'Mixed SAP & PACE',
     ageBand: 'Finance · multi-participant',
-    tagline: 'Multiple SAP + PACE claims batch',
-    managementType: 'Mixed SAP & PACE participants · batch claiming',
+    tagline: 'SAP + PACE batch → OPEN → Paid',
+    managementType: 'participants · batch claiming',
     scenario:
       'POST batch across multiple SAP and PACE participants → OPEN PACE line → GET batch → overnight BULK_CLAIM_REPORT → Paid.',
     accent: '#C1285E',
@@ -694,6 +694,81 @@ export const participants: Participant[] = [
         isEnding: true,
         endingSummary:
           'Mixed batch lodged → OPEN PACE line explained → GET batch → overnight BULK_CLAIM_REPORT shows Paid.',
+        choices: [],
+      },
+    ],
+  },
+  {
+    id: 'noah',
+    name: 'Noah Park',
+    ageBand: 'Adult · metro',
+    tagline: 'PACE determine → plans → historical plans',
+    managementType: 'PACE · plan manager',
+    scenario:
+      'Determine plan type → GET PACE plans → GET historical plans.',
+    accent: '#2f7d6d',
+    startStepId: 'noah_1',
+    steps: [
+      {
+        id: 'noah_1',
+        title: 'Determine Noah's plan type',
+        business:
+          'The first call confirms whether the participant is on an existing (SAP) plan or a PACE plan. Noah returns is_pace_plan: true, so subsequent calls use the PACE endpoint path.',
+        tone: 'neutral',
+        mockId: 'noah_determine',
+        choices: [
+          {
+            label: 'GET current PACE plan',
+            nextStepId: 'noah_2',
+            hint: 'GET /ext-int-part/4.0/pace/plans/',
+          },
+        ],
+      },
+      {
+        id: 'noah_2',
+        title: 'Retrieve active PACE plan',
+        business:
+          'The plan response confirms active dates and the plan_first_start_date — which tells you how long the participant has been on PACE and whether historical plan data exists.',
+        tone: 'success',
+        mockId: 'noah_pace_plans',
+        note: 'For PACE participants, participant_plan_id is always 0. Use plan_first_start_date vs plan_start_date to determine if prior plans exist.',
+        choices: [
+          {
+            label: 'Retrieve historical plans',
+            nextStepId: 'noah_3',
+            hint: 'GET /ext-int-part/4.0/pace/historical/plans',
+          },
+        ],
+      },
+      {
+        id: 'noah_3',
+        title: 'View historical plans',
+        business:
+          'Historical plans show all prior PACE plan periods for this participant. Useful for reconciling past claims, understanding budget transitions, and confirming plan continuity.',
+        note: [
+          'The Historical Plan API reflects only historical plan details — not the current active plan.',
+          'Only Plan Managers and Support Coordinators with an active relationship can access historical plans.',
+          'The My Provider role has no access to historical plans, in line with existing Portal functionality.',
+        ],
+        tone: 'success',
+        mockId: 'noah_historical_plans',
+        choices: [
+          {
+            label: 'Finish',
+            nextStepId: 'noah_end',
+            hint: 'Summary',
+          },
+        ],
+      },
+      {
+        id: 'noah_end',
+        title: 'Outcome for your organisation',
+        business:
+          'By determining the plan type first, then retrieving the current plan and historical plans, your system has a complete picture of the participant's PACE journey — enabling accurate claiming, budget queries, and audit trails.',
+        tone: 'success',
+        isEnding: true,
+        endingSummary:
+          'Determine PACE → GET current plan → GET historical plans for full plan timeline.',
         choices: [],
       },
     ],
