@@ -1160,6 +1160,19 @@ export const extraMocks: Record<string, MockExchange> = {
     },
     plainEnglish:
       'One prior PACE plan found (Aug 2024 – Jun 2025). This confirms plan continuity and helps reconcile historical claims or budget queries against the correct plan period.',
+    responseParsed: {
+      title: 'Historical PACE Plans',
+      summary: 'Prior plan periods for participant 600138083',
+      stats: [
+        { label: 'Historical plans', value: '1' },
+        { label: 'Current plan start', value: '26 Jun 2025' },
+      ],
+      columns: ['Plan period', 'Start date', 'End date'],
+      rows: [
+        ['Prior plan 1', '2024-08-02', '2025-06-25'],
+      ],
+      notes: ['Historical Plan API reflects only past plan details — not the current active plan.'],
+    },
   },
 }
 
