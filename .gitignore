@@ -12,3 +12,9 @@ coverage/
 *.log
 .vscode/
 .idea/
+docs/ca-lite/
+docs/ca-lite-raw/
+tmp-*.html
+tmp-*.css
+scripts/
+
