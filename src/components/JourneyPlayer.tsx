@@ -3,6 +3,7 @@ import { getStep } from '../data/participants'
 import type { Participant } from '../data/types'
 import { ApiEvidence } from './ApiEvidence'
 import { ParsedResponse } from './ParsedResponse'
+import { ParticipantPortrait } from './ParticipantPortrait'
 import { ReadablePanel } from './ReadablePanel'
 
 interface Props {
@@ -43,7 +44,15 @@ export function JourneyPlayer({
   if (step.isEnding) {
     return (
       <article className="ending panel" style={{ ['--accent' as string]: participant.accent }}>
-        <p className="eyebrow">Journey complete · {participant.name}</p>
+        <div className="journey-identity">
+          <ParticipantPortrait
+            id={participant.id}
+            name={participant.name}
+            accent={participant.accent}
+            size="lg"
+          />
+          <p className="eyebrow">Journey complete · {participant.name}</p>
+        </div>
         <h2 className="display">{step.title}</h2>
         <p className="lead">{step.business}</p>
         {step.endingSummary && <p className="ending-summary">{step.endingSummary}</p>}
@@ -94,11 +103,19 @@ export function JourneyPlayer({
   return (
     <article className="journey panel" style={{ ['--accent' as string]: participant.accent }}>
       <header className="journey-top">
-        <div>
-          <p className="eyebrow">
-            {participant.name} · {participant.managementType}
-          </p>
-          <h2 className="display step-title">{step.title}</h2>
+        <div className="journey-heading">
+          <ParticipantPortrait
+            id={participant.id}
+            name={participant.name}
+            accent={participant.accent}
+            size="lg"
+          />
+          <div>
+            <p className="eyebrow">
+              {participant.name} · {participant.managementType}
+            </p>
+            <h2 className="display step-title">{step.title}</h2>
+          </div>
         </div>
         <div className="progress" aria-label={`Progress ${progress}%`}>
           <div className="progress-track">

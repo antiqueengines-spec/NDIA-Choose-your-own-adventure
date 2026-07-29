@@ -1,4 +1,5 @@
 import type { Participant } from '../data/types'
+import { ParticipantPortrait } from './ParticipantPortrait'
 
 interface Props {
   participants: Participant[]
@@ -29,8 +30,13 @@ export function ParticipantPicker({ participants, onSelect, onBack, onOpenReport
             style={{ ['--accent' as string]: p.accent, animationDelay: `${i * 80}ms` }}
             onClick={() => onSelect(p.id)}
           >
-            <span className="participant-name">{p.name}</span>
-            <span className="participant-meta">{p.ageBand}</span>
+            <span className="participant-card-top">
+              <ParticipantPortrait id={p.id} name={p.name} accent={p.accent} size="md" />
+              <span className="participant-card-copy">
+                <span className="participant-name">{p.name}</span>
+                <span className="participant-meta">{p.ageBand}</span>
+              </span>
+            </span>
             <span className="participant-tag">{p.tagline}</span>
             <span className="participant-scenario">{p.scenario}</span>
             <span className="participant-cta">Start journey →</span>
