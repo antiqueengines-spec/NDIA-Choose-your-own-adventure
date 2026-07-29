@@ -711,7 +711,7 @@ export const participants: Participant[] = [
     steps: [
       {
         id: 'noah_1',
-        title: 'Determine Noah's plan type',
+        title: "Determine Noah's plan type",
         business:
           'The first call confirms whether the participant is on an existing (SAP) plan or a PACE plan. Noah returns is_pace_plan: true, so subsequent calls use the PACE endpoint path.',
         tone: 'neutral',
@@ -764,7 +764,7 @@ export const participants: Participant[] = [
         id: 'noah_end',
         title: 'Outcome for your organisation',
         business:
-          'By determining the plan type first, then retrieving the current plan and historical plans, your system has a complete picture of the participant's PACE journey — enabling accurate claiming, budget queries, and audit trails.',
+          "By determining the plan type first, then retrieving the current plan and historical plans, your system has a complete picture of the participant's PACE journey — enabling accurate claiming, budget queries, and audit trails.",
         tone: 'success',
         isEnding: true,
         endingSummary:

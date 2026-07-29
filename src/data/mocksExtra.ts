@@ -1135,7 +1135,7 @@ export const extraMocks: Record<string, MockExchange> = {
       ],
     },
     plainEnglish:
-      'Noah's current PACE plan runs until mid-2028. The plan_first_start_date shows he has been on PACE since August 2024 — meaning historical plans exist.',
+      "Noah's current PACE plan runs until mid-2028. The plan_first_start_date shows he has been on PACE since August 2024 — meaning historical plans exist.",
   },
   noah_historical_plans: {
     id: 'noah_historical_plans',
