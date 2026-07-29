@@ -600,10 +600,10 @@ export const participants: Participant[] = [
     id: 'kai',
     name: 'Kai Mendes',
     ageBand: 'Finance · multi-participant',
-    tagline: 'SAP + PACE batch → OPEN → Paid',
-    managementType: 'Mixed SAP & PACE · batch claiming',
+    tagline: 'Multiple SAP + PACE claims batch',
+    managementType: 'Mixed SAP & PACE participants · batch claiming',
     scenario:
-      'POST batch (SAP + PACE) → OPEN PACE line → GET batch → overnight BULK_CLAIM_REPORT → Paid.',
+      'POST batch across multiple SAP and PACE participants → OPEN PACE line → GET batch → overnight BULK_CLAIM_REPORT → Paid.',
     accent: '#C1285E',
     startStepId: 'kai_1',
     steps: [
@@ -611,7 +611,7 @@ export const participants: Participant[] = [
         id: 'kai_1',
         title: 'Lodge a mixed SAP + PACE batch',
         business:
-          'One batch file covers an existing-plan (SAP) participant and PACE participants. Submit via POST /payments/batch with a batch reference ending in .csv.',
+          'One batch file covers multiple existing-plan (SAP) and PACE participants. Submit via POST /payments/batch with a batch reference ending in .csv.',
         tone: 'neutral',
         mockId: 'kai_batch_post',
         choices: [

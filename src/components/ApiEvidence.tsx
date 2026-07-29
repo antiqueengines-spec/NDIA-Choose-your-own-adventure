@@ -8,6 +8,19 @@ interface Props {
 
 export function ApiEvidence({ mock, defaultOpen = false }: Props) {
   const [open, setOpen] = useState(defaultOpen)
+  const highlightOpenFields = mock.id === 'kai_batch_open' || mock.id === 'kai_batch_get'
+
+  function formatJson(value: unknown) {
+    const raw = JSON.stringify(value, null, 2)
+    if (!highlightOpenFields) return raw
+    return raw
+      .replaceAll('&', '&amp;')
+      .replaceAll('<', '&lt;')
+      .replaceAll('>', '&gt;')
+      .replace(/"claim_number": 0/g, '<span class="json-emph">"claim_number": 0</span>')
+      .replace(/"claim_status": ""/g, '<span class="json-emph">"claim_status": ""</span>')
+      .replace(/"reject_reason_code": ""/g, '<span class="json-emph">"reject_reason_code": ""</span>')
+  }
 
   return (
     <section className="evidence" data-open={open}>
@@ -36,12 +49,20 @@ export function ApiEvidence({ mock, defaultOpen = false }: Props) {
               <div className="code-label">
                 {mock.method === 'GET' ? 'Query / headers' : 'Request body'}
               </div>
-              <pre>{JSON.stringify(mock.request, null, 2)}</pre>
+              {highlightOpenFields ? (
+                <pre dangerouslySetInnerHTML={{ __html: formatJson(mock.request) }} />
+              ) : (
+                <pre>{formatJson(mock.request)}</pre>
+              )}
             </div>
           )}
           <div className="code-block">
             <div className="code-label">Technical response</div>
-            <pre>{JSON.stringify(mock.response, null, 2)}</pre>
+            {highlightOpenFields ? (
+              <pre dangerouslySetInnerHTML={{ __html: formatJson(mock.response) }} />
+            ) : (
+              <pre>{formatJson(mock.response)}</pre>
+            )}
           </div>
           <p className="evidence-note">
             Sample CA Lite–style payload for demonstration. No live NDIA or Care Access
