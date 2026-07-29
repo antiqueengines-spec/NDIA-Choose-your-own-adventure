@@ -71,7 +71,7 @@ export default function App() {
       <div className="bg-grid" aria-hidden />
 
       <header className="site-header">
-        <a className="brand" href="https://www.yourcareaccess.com.au/" target="_blank" rel="noreferrer">
+        <div className="brand">
           <img
             className="brand-logo"
             src={`${import.meta.env.BASE_URL}brand/logo.png`}
@@ -79,7 +79,7 @@ export default function App() {
             width={160}
             height={48}
           />
-        </a>
+        </div>
         <div className="header-actions">
           <button type="button" className="text-btn" onClick={goLanding}>
             Home
