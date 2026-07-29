@@ -5,6 +5,7 @@ import { ParticipantPicker } from './components/ParticipantPicker'
 import { JourneyPlayer } from './components/JourneyPlayer'
 import { ReportsHub } from './components/ReportsHub'
 import { WebhookEventsHub } from './components/WebhookEventsHub'
+import { DeveloperReferenceHub } from './components/DeveloperReferenceHub'
 
 export default function App() {
   const [screen, setScreen] = useState<Screen>('landing')
@@ -37,6 +38,13 @@ export default function App() {
 
   function goNotifications() {
     setScreen('notifications')
+    setParticipantId(null)
+    setStepId(null)
+    setHistory([])
+  }
+
+  function goDevelopers() {
+    setScreen('developers')
     setParticipantId(null)
     setStepId(null)
     setHistory([])
@@ -82,7 +90,10 @@ export default function App() {
           <button type="button" className="text-btn" onClick={goReports}>
             Reports
           </button>
-          <span className="demo-badge">Interactive demo · sample APIs</span>
+          <button type="button" className="text-btn" onClick={goDevelopers}>
+            Developers
+          </button>
+          <span className="demo-badge">CA Lite - Interactive Demo</span>
         </div>
       </header>
 
@@ -109,11 +120,15 @@ export default function App() {
                 <button type="button" className="btn btn-brand-pink" onClick={goReports}>
                   Explore business reports
                 </button>
+                <button type="button" className="btn btn-ghost" onClick={goDevelopers}>
+                  Reference data &amp; products
+                </button>
               </div>
               <ul className="hero-points hero-in delay-4">
                 <li>Plan, goals &amp; PACE paths</li>
                 <li>Batch claiming &amp; quotations</li>
                 <li>Webhook event notifications</li>
+                <li>Reference data &amp; products for developers</li>
               </ul>
             </div>
             <figure className="hero-visual hero-in delay-2">
@@ -141,6 +156,8 @@ export default function App() {
         )}
 
         {screen === 'reports' && <ReportsHub onBack={goLanding} />}
+
+        {screen === 'developers' && <DeveloperReferenceHub onBack={goLanding} />}
 
         {screen === 'journey' && participant && stepId && (
           <JourneyPlayer

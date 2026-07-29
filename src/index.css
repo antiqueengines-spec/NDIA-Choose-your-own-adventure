@@ -332,6 +332,14 @@ main,
   color: var(--pink-deep);
 }
 
+.dev-hub .code-block {
+  margin-top: 0.35rem;
+}
+
+.dev-hub .report-panel h3 {
+  margin-top: 0.15rem;
+}
+
 .btn-ghost {
   background: transparent;
   border-color: rgba(27, 27, 39, 0.22);

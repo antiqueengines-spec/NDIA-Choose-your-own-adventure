@@ -1,4 +1,4 @@
-export type Screen = 'landing' | 'pick' | 'journey' | 'reports' | 'notifications'
+export type Screen = 'landing' | 'pick' | 'journey' | 'reports' | 'notifications' | 'developers'
 
 export type ParticipantId =
   | 'maya'
