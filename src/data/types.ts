@@ -7,6 +7,8 @@ export type ParticipantId =
   | 'aisha'
   | 'riley'
   | 'priya'
+  | 'lena'
+  | 'kai'
 
 export interface MockExchange {
   id: string
@@ -38,8 +40,8 @@ export interface JourneyStep {
   title: string
   business: string
   withoutCareAccess?: string
-  /** Optional callout note shown on the step */
-  note?: string
+  /** Optional callout note shown on the step (string or paragraphs) */
+  note?: string | string[]
   tone?: 'neutral' | 'success' | 'warning' | 'danger'
   mockId?: string
   /** Optional human-readable panel keyed in readableViews */

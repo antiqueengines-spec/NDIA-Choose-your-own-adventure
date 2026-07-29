@@ -120,7 +120,11 @@ export function JourneyPlayer({
       {step.note && (
         <aside className="callout callout-note">
           <strong>Note</strong>
-          <p>{step.note}</p>
+          {Array.isArray(step.note) ? (
+            step.note.map((paragraph) => <p key={paragraph.slice(0, 48)}>{paragraph}</p>)
+          ) : (
+            <p>{step.note}</p>
+          )}
         </aside>
       )}
 

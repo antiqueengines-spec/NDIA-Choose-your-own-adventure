@@ -518,6 +518,186 @@ export const participants: Participant[] = [
       },
     ],
   },
+  {
+    id: 'lena',
+    name: 'Lena Torres',
+    ageBand: 'Adult · metro',
+    tagline: 'Claims report → GET → cancel',
+    managementType: 'Existing plan · finance',
+    scenario:
+      'Request PARTICIPANT_CLAIMS → GET claim → PATCH cancel (SAP).',
+    accent: '#5B8DB8',
+    startStepId: 'lena_1',
+    steps: [
+      {
+        id: 'lena_1',
+        title: 'Request a participant claims report',
+        business:
+          'Finance needs a dated extract of claims before changing anything. Request PARTICIPANT_CLAIMS for Lena’s window — the HTTP call acknowledges, then the report lands via webhook.',
+        tone: 'neutral',
+        mockId: 'lena_claims_report_request',
+        choices: [
+          {
+            label: 'Open the claims report payload',
+            nextStepId: 'lena_2',
+            hint: 'Webhook · PARTICIPANT_CLAIMS',
+          },
+        ],
+      },
+      {
+        id: 'lena_2',
+        title: 'Review claims in the report',
+        business:
+          'The report lists Lena’s claims for the period. One line is still Payment Pending — a good candidate to cancel before it pays.',
+        tone: 'warning',
+        mockId: 'lena_claims_report',
+        choices: [
+          {
+            label: 'Fetch the pending claim detail',
+            nextStepId: 'lena_3',
+            hint: 'GET /v1/5.0/payments/{claim_number}',
+          },
+        ],
+      },
+      {
+        id: 'lena_3',
+        title: 'GET the claim',
+        business:
+          'Single-claim GET confirms amount, dates, support item, and Payment Pending status — enough evidence to cancel safely from your system.',
+        tone: 'neutral',
+        mockId: 'lena_claim_get',
+        choices: [
+          {
+            label: 'Cancel the claim',
+            nextStepId: 'lena_4',
+            hint: 'PATCH /v1/5.0/payments/sap/{claim_number}',
+          },
+        ],
+      },
+      {
+        id: 'lena_4',
+        title: 'Cancel the claim (SAP)',
+        business:
+          'PATCH cancel returns Cancelled status and a cancellation claim number. Finance can stop chasing a line that should never have paid.',
+        tone: 'success',
+        mockId: 'lena_claim_cancel',
+        choices: [{ label: 'See the business outcome', nextStepId: 'lena_end' }],
+      },
+      {
+        id: 'lena_end',
+        title: 'Outcome for your organisation',
+        business:
+          'Claims reporting plus GET and cancel keep corrections inside your CRM — no My Place export, no guessing which line to reverse.',
+        tone: 'success',
+        isEnding: true,
+        endingSummary:
+          'PARTICIPANT_CLAIMS requested → report reviewed → GET claim → SAP PATCH cancel succeeded.',
+        choices: [],
+      },
+    ],
+  },
+  {
+    id: 'kai',
+    name: 'Kai Mendes',
+    ageBand: 'Finance · multi-participant',
+    tagline: 'SAP + PACE batch → OPEN → Paid',
+    managementType: 'Mixed SAP & PACE · batch claiming',
+    scenario:
+      'POST batch (SAP + PACE) → OPEN PACE line → GET batch → overnight BULK_CLAIM_REPORT → Paid.',
+    accent: '#C1285E',
+    startStepId: 'kai_1',
+    steps: [
+      {
+        id: 'kai_1',
+        title: 'Lodge a mixed SAP + PACE batch',
+        business:
+          'One batch file covers an existing-plan (SAP) participant and PACE participants. Submit via POST /payments/batch with a batch reference ending in .csv.',
+        tone: 'neutral',
+        mockId: 'kai_batch_post',
+        choices: [
+          {
+            label: 'Inspect bulk process results',
+            nextStepId: 'kai_2',
+            hint: 'Includes an OPEN PACE line',
+          },
+        ],
+      },
+      {
+        id: 'kai_2',
+        title: 'Batch finish — one claim is OPEN',
+        business:
+          'SAP lines receive claim numbers. A PACE line for an unendorsed support category comes back with claim_number 0 and an empty claim_status — the OPEN indicator.',
+        note: [
+          'The OPEN status is a payload-driven indicator rather than an official NDIA claim status. It signifies that the NDIA has not yet processed the claim.',
+          "This scenario is unique to PACE participant claims and occurs when a participant has not yet endorsed a provider's delivered service at the support category level.",
+          'These OPEN claims will remain held in the NDIA processing queue until one of the following occurs:',
+          'The participant explicitly approves the claim via their myplace portal.',
+          'The participant explicitly rejects the claim via their myplace portal.',
+          'A specific system timeframe lapses, triggering an automatic system action.',
+        ],
+        tone: 'warning',
+        mockId: 'kai_batch_open',
+        choices: [
+          {
+            label: 'GET the batch results',
+            nextStepId: 'kai_3',
+            hint: 'GET /v1/5.0/payments/batch',
+          },
+        ],
+      },
+      {
+        id: 'kai_3',
+        title: 'GET batch by reference',
+        business:
+          'GET batch returns every line under the batch reference — including claim_id for PACE rows you may need later for cancel or detail lookups.',
+        tone: 'neutral',
+        mockId: 'kai_batch_get',
+        choices: [
+          {
+            label: 'Request a Bulk Claim Report',
+            nextStepId: 'kai_4',
+            hint: 'POST /notifications/report · BULK_CLAIM_REPORT',
+          },
+        ],
+      },
+      {
+        id: 'kai_4',
+        title: 'Request Bulk Claim Report',
+        business:
+          'Request BULK_CLAIM_REPORT for the batch reference. The HTTP call succeeds immediately; the paid outcome arrives later via webhook.',
+        note: 'The Bulk Claim Report for paid outcomes is delivered overnight once NDIA has processed and paid claims from the prior day — it does not return synchronously with the report request.',
+        tone: 'warning',
+        mockId: 'kai_bulk_report_request',
+        choices: [
+          {
+            label: 'Open overnight Bulk Claim Report',
+            nextStepId: 'kai_5',
+            hint: 'Webhook · Paid (claim_status 41)',
+          },
+        ],
+      },
+      {
+        id: 'kai_5',
+        title: 'Overnight report — claims Paid',
+        business:
+          'The overnight BULK_CLAIM_REPORT shows claim_status 41 (Paid) with real paid dates and clearing numbers — finance can reconcile the batch.',
+        tone: 'success',
+        mockId: 'kai_bulk_report_paid',
+        choices: [{ label: 'See the business outcome', nextStepId: 'kai_end' }],
+      },
+      {
+        id: 'kai_end',
+        title: 'Outcome for your organisation',
+        business:
+          'Mixed SAP/PACE batches, OPEN holds for unendorsed PACE services, and overnight paid reports give finance one controlled path from lodge to reconcile.',
+        tone: 'success',
+        isEnding: true,
+        endingSummary:
+          'Mixed batch lodged → OPEN PACE line explained → GET batch → overnight BULK_CLAIM_REPORT shows Paid.',
+        choices: [],
+      },
+    ],
+  },
 ]
 
 export function getParticipant(id: string): Participant | undefined {

@@ -936,6 +936,10 @@ main,
   font-size: 0.95rem;
 }
 
+.callout p + p {
+  margin-top: 0.55rem;
+}
+
 .evidence {
   border: 1px solid var(--line);
   border-radius: 14px;
