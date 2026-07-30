@@ -52,6 +52,8 @@ export interface JourneyStep {
   endingSummary?: string
 }
 
+export type TeamFocus = 'intake' | 'operations' | 'finance'
+
 export interface Participant {
   id: ParticipantId
   name: string
@@ -60,6 +62,8 @@ export interface Participant {
   managementType: string
   scenario: string
   accent: string
+  /** Which provider teams this journey is most relevant to */
+  teams: TeamFocus[]
   startStepId: string
   steps: JourneyStep[]
 }

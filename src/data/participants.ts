@@ -9,6 +9,7 @@ export const participants: Participant[] = [
     managementType: 'Existing plan (non-PACE)',
     scenario: 'Determine plan → plans → SB list → SB detail (allocated/remaining) → payment.',
     accent: '#D54F7F',
+    teams: ['intake', 'operations', 'finance'],
     startStepId: 'maya_1',
     steps: [
       {
@@ -107,6 +108,7 @@ export const participants: Participant[] = [
     scenario:
       'A realistic failure path — CA Lite returns authority failure until consent/relationship is fixed.',
     accent: '#76ABD6',
+    teams: ['intake'],
     startStepId: 'jordan_1',
     steps: [
       {
@@ -211,6 +213,7 @@ export const participants: Participant[] = [
     scenario:
       'Determine PACE → plan details → PACE budget → POST /payments/pace.',
     accent: '#C1285E',
+    teams: ['intake', 'operations', 'finance'],
     startStepId: 'sam_1',
     steps: [
       {
@@ -296,6 +299,7 @@ export const participants: Participant[] = [
     managementType: 'PACE plan · goals focus',
     scenario: 'Determine plan → GET plans → goals → historical goals.',
     accent: '#5B8DB8',
+    teams: ['intake', 'operations'],
     startStepId: 'aisha_1',
     steps: [
       {
@@ -370,6 +374,7 @@ export const participants: Participant[] = [
     scenario:
       'GET plans → PACE budget → historical budgets → service delivered table → 5.0 payments batch.',
     accent: '#1B1B27',
+    teams: ['finance', 'operations'],
     startStepId: 'riley_1',
     steps: [
       {
@@ -464,6 +469,7 @@ export const participants: Participant[] = [
     managementType: 'Existing plan · AT quoting',
     scenario: 'GET plans → quotations list → respond with quotations PATCH.',
     accent: '#A83A66',
+    teams: ['operations'],
     startStepId: 'priya_1',
     steps: [
       {
@@ -527,6 +533,7 @@ export const participants: Participant[] = [
     scenario:
       'Request PARTICIPANT_CLAIMS → GET claim → PATCH cancel (SAP).',
     accent: '#5B8DB8',
+    teams: ['finance'],
     startStepId: 'lena_1',
     steps: [
       {
@@ -605,6 +612,7 @@ export const participants: Participant[] = [
     scenario:
       'POST batch across multiple SAP and PACE participants → OPEN PACE line → GET batch → overnight BULK_CLAIM_REPORT → Paid.',
     accent: '#C1285E',
+    teams: ['finance'],
     startStepId: 'kai_1',
     steps: [
       {
@@ -707,6 +715,7 @@ export const participants: Participant[] = [
     scenario:
       'Determine plan type → GET PACE plans → GET historical plans.',
     accent: '#2f7d6d',
+    teams: ['intake', 'operations'],
     startStepId: 'noah_1',
     steps: [
       {
